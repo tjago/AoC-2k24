@@ -10,14 +10,11 @@ import java.util.stream.Stream;
 
 public class Day3 {
     public static void main(String[] args) throws IOException {
-
-        Stream<String> inputStream = Files.lines(Path.of("res/Day3.txt")).collect(Collectors.joining()).lines();
-
-        System.out.println("Multiplied muls: " + new Day3().solution(inputStream));
+        System.out.println("Multiplied muls: " + new Day3().solution());
         System.out.println("conditional and multiplied muls: " + new Day3().solutionPart2());
     }
 
-    private static long solution(Stream<String> inputStream) throws IOException {
+    private static long solution() throws IOException {
         return Files
                 .lines(Path.of("res/Day3.txt"))
                 .map(string -> Pattern.compile("mul\\(\\d+,\\d+\\)")
