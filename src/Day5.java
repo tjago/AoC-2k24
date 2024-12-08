@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 public class Day5 {
     public static void main(String[] args) throws IOException {
-        System.out.println("The sum of correct odrers middle pages is (sample: 143): "
+        System.out.println("The sum of correct orders middle pages is (sample: 143): "
                 +  new Day5().solution("res/Day5-sample.txt"));
     }
 
