@@ -54,15 +54,11 @@ public class Day6Part2 {
         List<Field> labirynth = Files
                 .lines(Path.of(filename))
                 .flatMapToInt(line -> line.chars())
-                .mapToObj(charNumber -> {
-                    switch (charNumber) {
-                        case 35:
-                            return Field.OBSTRUCTION;
-                        case 94:
-                            return Field.START;
-                        default:
-                            return Field.EMPTY;
-                    }
+                .mapToObj(charNumber ->
+                        switch (charNumber) {
+                    case 35 -> Field.OBSTRUCTION;
+                    case 94 -> Field.START;
+                    default -> Field.EMPTY;
                 })
                 .toList();
 
@@ -74,7 +70,7 @@ public class Day6Part2 {
     }
 
     //return 0 if path cannot be looped
-    private int walkLabyrinth(List<Field> labirynth, int labyrinthWidth, int extraObstructionAtPosition) {
+    private long walkLabyrinth(List<Field> labirynth, int labyrinthWidth, int extraObstructionAtPosition) {
         int startPosition = labirynth.indexOf(Field.START);
         Direction startDirection = Direction.UP;
 
@@ -91,7 +87,7 @@ public class Day6Part2 {
         //Before we start walk we need to add mechanism to detect looping
         //here I add set of steps, if step is already in the set, then we are in the loop
         Set<Step> uniqueSteps = new HashSet<>();
-        int duplicatedStepsCount = 1000; //assume 1000 repeated steps means we are in the loop
+        int duplicatedStepsCount = 0; //assume 1000 repeated steps means we are in the loop
         do {
             if (uniqueSteps.add(step) != true) { //for this to work I needed equals and hashset methods for inner class
 //                System.out.println("starting to repeat steps, exiting..");
@@ -111,11 +107,13 @@ public class Day6Part2 {
     /*
         Initially it was recursive function until I got stack overflow exception
      */
-    private Step walkIt(List<Field> labirynth, int labyrinthWidth, Step step) {
+    private Step walkIt(List<Field> labirynth, int labyrinthWidth, Step step) { //1845 wrong
 //        System.out.println("Walking position: " + step.pos);
-        if(step.dir == Direction.LEFT && step.pos % labyrinthWidth == labyrinthWidth - 1) return null; //left map from left
-        if(step.dir == Direction.RIGHT && step.pos % labyrinthWidth == 0) return null; //left map from right
+        if(step.dir == Direction.LEFT && step.pos % labyrinthWidth == 0) return null; //left map from left
+        if(step.dir == Direction.RIGHT && step.pos % labyrinthWidth == labyrinthWidth - 1) return null; //left map from right
 
+//        if (step.dir == Direction.UP && step.pos / labyrinthWidth == 0) return null;
+//        if (step.dir == Direction.DOWN && labirynth.size() - step.pos +1 < labyrinthWidth) return null;
         //if obstructed change direction
         try {
             switch (step.dir) {
