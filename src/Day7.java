@@ -28,7 +28,7 @@ public class Day7 {
         }
 
         static long isCorrect(Equation eq) {
-            if (calculate(eq, 0) == true) {
+            if (calculatePart2(eq, 0) == true) {
                 return eq.result;
             }
             return 0;
@@ -44,6 +44,24 @@ public class Day7 {
 
             return calculate(remainingEquation, subResult + nextVal)
                     || calculate(remainingEquation, subResult * nextVal);
+        }
+
+        //part 2, just slightly different
+        static private boolean calculatePart2(Equation equationValues, long subResult) {
+
+            if (equationValues.values.isEmpty()) {
+                return equationValues.result == subResult;
+            }
+            Equation remainingEquation = new Equation(equationValues.result, equationValues.values.subList(1, equationValues.values.size()));
+            long nextVal = equationValues.values().getFirst();
+
+            return calculatePart2(remainingEquation, subResult + nextVal)
+                    || calculatePart2(remainingEquation, subResult * nextVal)
+                    || calculatePart2(remainingEquation, mergeNumbers(subResult, nextVal));
+        }
+
+        static private long mergeNumbers( long a, long b) {
+            return Long.parseLong(String.valueOf(a) + String.valueOf(b));
         }
 
         @Override
